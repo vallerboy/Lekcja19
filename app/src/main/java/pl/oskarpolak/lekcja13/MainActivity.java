@@ -5,7 +5,9 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.os.Vibrator;
@@ -23,45 +25,89 @@ import android.view.View;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends Activity {
 
 
+    MediaRecorder mediaRecorder;
+
+    MediaPlayer mediaPlayer;
+
+    File ourAudio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-       // vibrator.vibrate(1000);
+        ourAudio = new File(getFilesDir().getAbsolutePath() + "/ourAudio.3gp");
+    }
 
-        if(vibrator.hasVibrator()){
-            Log.e("Vibrator", "Może wibrować");
-        }else{
-            Log.e("Vibrator", "Nie ma opcji wibrowania");
+    @OnClick(R.id.record)
+    public void buttonStartRecording(){
+        startRecording();
+    }
+    @OnClick(R.id.stopRecord)
+    public void buttonStopRecording(){
+        stopRecording();
+    }
+
+    private  void startRecording(){
+          mediaRecorder = new MediaRecorder();
+          mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+          mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+          mediaRecorder.setOutputFile(ourAudio.getAbsolutePath());
+          mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+
+        try {
+            mediaRecorder.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        // 0 - przerwa, 1 - długość, 2 - przerwa, 3 - długość, 4 - przerwa, 5 - długość [..]
-        long[] pattern = {0, 500, 100, 500, 100, 500, 100, 500};
-        vibrator.vibrate(pattern, -1);
+        mediaRecorder.start();
 
-        // Użyj aby anulować wibracje
-        // vibrator.cancel();
 
 
     }
 
-    @Override
-    public void onBackPressed(){
-       // super.onBackPressed();
-        Log.e("debug", "Ktoś kliknął back");
+    private void stopRecording(){
+        mediaRecorder.release();
+        mediaRecorder.stop();
+        mediaRecorder = null;
     }
 
 
+    private void playRecord(){
+        mediaPlayer = new MediaPlayer();
+
+        try {
+            mediaPlayer.setDataSource(ourAudio.getAbsolutePath());
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void stopPlaying(){
+        mediaPlayer.release();
+        mediaPlayer.stop();
+        mediaPlayer = null;
+    }
 
 
+    // Tym sie nie przejmujecie
     private class ZoomOutPageTransformer implements ViewPager.PageTransformer {
         private static final float MIN_SCALE = 0.85f;
         private static final float MIN_ALPHA = 0.5f;
