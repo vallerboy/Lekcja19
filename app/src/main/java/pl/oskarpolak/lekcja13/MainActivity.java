@@ -59,6 +59,14 @@ public class MainActivity extends Activity {
     public void buttonStopRecording(){
         stopRecording();
     }
+    @OnClick(R.id.play)
+    public void buttonPlayRecord(){
+        playRecord();
+    }
+    @OnClick(R.id.stopPlay)
+    public void buttonStopPlay(){
+        stopPlaying();
+    }
 
     private  void startRecording(){
           mediaRecorder = new MediaRecorder();
