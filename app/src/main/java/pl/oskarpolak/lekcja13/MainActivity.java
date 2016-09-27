@@ -39,14 +39,9 @@ import butterknife.OnClick;
 import butterknife.OnItemLongClick;
 import butterknife.OnLongClick;
 
-public class MainActivity extends Activity implements  GestureDetector.OnGestureListener, View.OnLongClickListener{
+public class MainActivity extends Activity {
 
 
-
-    GestureDetector gestureDetector;
-
-    @BindView(R.id.button2)
-    Button ourButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,72 +49,12 @@ public class MainActivity extends Activity implements  GestureDetector.OnGesture
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-         gestureDetector = new GestureDetector(this, this);
 
-        // Zmiana lokalizacji
-        Configuration configuration = new Configuration();
-        configuration.setLocale(Locale.CHINA);
-
-
-        ourButton.setOnLongClickListener(this);
 
 
     }
 
-    @OnLongClick(R.id.button2)
-    public boolean onLongClick1(View v){
-        Toast.makeText(this, "Długie kliknięcie", Toast.LENGTH_SHORT).show();
-        return true;
-    }
 
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event){
-        gestureDetector.onTouchEvent(event);
-        return true;
-    }
-
-    @Override
-    public boolean onDown(MotionEvent e) {
-        Log.e("GestureDetector", "OnDown " + e.toString());
-        return false;
-    }
-
-    @Override
-    public void onShowPress(MotionEvent e) {
-        Log.e("GestureDetector", "OnShowPress " + e.toString());
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent e) {
-        Log.e("GestureDetector", "OnSingleTapUp " + e.toString());
-        return false;
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        
-        Log.e("GestureDetector", "OnScroll");
-        return false;
-    }
-
-    @Override
-    public void onLongPress(MotionEvent e) {
-        Log.e("GestureDetector", "OnLongPress " + e.toString());
-
-    }
-
-    @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        Log.e("GestureDetector", "OnFling");
-        return false;
-    }
-
-    @Override
-    public boolean onLongClick(View v) {
-
-        return false;
-    }
 
 
     // Tym sie nie przejmujecie
