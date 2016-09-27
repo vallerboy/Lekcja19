@@ -39,13 +39,15 @@ import butterknife.OnClick;
 import butterknife.OnItemLongClick;
 import butterknife.OnLongClick;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
 
     @BindView(R.id.viewPager)
     ViewPager viewPager;
 
     public static final int PAGE_COUNT = 3;
+
+    private PagerAdapter pagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +57,19 @@ public class MainActivity extends Activity {
 
 
 
+        pagerAdapter = new ScreenPagerAdapter(this.getSupportFragmentManager());
+        viewPager.setAdapter(pagerAdapter);
+
+
 
     }
 
+//    public boolean testMethod(){
+//        System.out.print("asd");
+//        return  true;
+//        System.out.print("zdc"); // ERRRRRRROR!
+//        return false;  // ERRRRRROR!
+//    }
 
     private class ScreenPagerAdapter extends FragmentStatePagerAdapter {
 
