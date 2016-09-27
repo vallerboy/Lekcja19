@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
 
     private PagerAdapter pagerAdapter;
 
+    private AlarmManager alarmManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +61,25 @@ public class MainActivity extends AppCompatActivity {
 
         pagerAdapter = new ScreenPagerAdapter(this.getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
+        viewPager.setPageTransformer(true, new ZoomOutPageTransformer());
 
+        Intent i = new Intent(this, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, i, 0);
+
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
+        //alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 10 * 1000, pendingIntent);
+         // alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, AlarmManager.INTERVAL_HALF_HOUR, AlarmManager.INTERVAL_HALF_HOUR, pendingIntent);
+
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+
+        calendar.set(Calendar.HOUR_OF_DAY, 8);
+        calendar.set(Calendar.MINUTE, 30);
+
+
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), 1000 * 10, pendingIntent);
 
 
     }
