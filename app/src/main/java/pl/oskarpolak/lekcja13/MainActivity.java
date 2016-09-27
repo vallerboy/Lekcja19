@@ -42,6 +42,10 @@ import butterknife.OnLongClick;
 public class MainActivity extends Activity {
 
 
+    @BindView(R.id.viewPager)
+    ViewPager viewPager;
+
+    public static final int PAGE_COUNT = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,35 @@ public class MainActivity extends Activity {
     }
 
 
+    private class ScreenPagerAdapter extends FragmentStatePagerAdapter {
+
+        public ScreenPagerAdapter(android.support.v4.app.FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch(position){
+                case 0: {
+                        return new BlueFragment();
+                }
+                case 1: {
+                        return new RedFragment();
+                }
+                case 2: {
+                        return new GreenFragment();
+                }
+                default: {
+                    return null;
+                }
+            }
+        }
+
+        @Override
+        public int getCount() {
+            return PAGE_COUNT;
+        }
+    }
 
 
     // Tym sie nie przejmujecie
