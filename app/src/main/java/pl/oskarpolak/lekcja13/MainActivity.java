@@ -37,8 +37,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnItemLongClick;
+import butterknife.OnLongClick;
 
-public class MainActivity extends Activity implements  GestureDetector.OnGestureListener{
+public class MainActivity extends Activity implements  GestureDetector.OnGestureListener, View.OnLongClickListener{
 
 
 
@@ -60,11 +61,13 @@ public class MainActivity extends Activity implements  GestureDetector.OnGesture
         configuration.setLocale(Locale.CHINA);
 
 
+        ourButton.setOnLongClickListener(this);
+
 
     }
 
-    @OnItemLongClick(R.id.button2)
-    public boolean onLongClick(View v){
+    @OnLongClick(R.id.button2)
+    public boolean onLongClick1(View v){
         Toast.makeText(this, "Długie kliknięcie", Toast.LENGTH_SHORT).show();
         return true;
     }
@@ -95,6 +98,7 @@ public class MainActivity extends Activity implements  GestureDetector.OnGesture
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        
         Log.e("GestureDetector", "OnScroll");
         return false;
     }
@@ -108,6 +112,12 @@ public class MainActivity extends Activity implements  GestureDetector.OnGesture
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         Log.e("GestureDetector", "OnFling");
+        return false;
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+
         return false;
     }
 
