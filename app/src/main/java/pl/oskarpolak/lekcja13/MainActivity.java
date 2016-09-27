@@ -5,6 +5,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -22,25 +23,29 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.MediaController;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnItemLongClick;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements  GestureDetector.OnGestureListener{
 
 
-    MediaRecorder mediaRecorder;
 
-    MediaPlayer mediaPlayer;
+    GestureDetector gestureDetector;
 
-    File ourAudio;
+    @BindView(R.id.button2)
+    Button ourButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,70 +53,62 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        ourAudio = new File(getFilesDir().getAbsolutePath() + "/ourAudio.3gp");
-    }
+         gestureDetector = new GestureDetector(this, this);
 
-    @OnClick(R.id.record)
-    public void buttonStartRecording(){
-        startRecording();
-    }
-    @OnClick(R.id.stopRecord)
-    public void buttonStopRecording(){
-        stopRecording();
-    }
-    @OnClick(R.id.play)
-    public void buttonPlayRecord(){
-        playRecord();
-    }
-    @OnClick(R.id.stopPlay)
-    public void buttonStopPlay(){
-        stopPlaying();
-    }
-
-    private  void startRecording(){
-          mediaRecorder = new MediaRecorder();
-          mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-          mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-          mediaRecorder.setOutputFile(ourAudio.getAbsolutePath());
-          mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-
-
-        try {
-            mediaRecorder.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        mediaRecorder.start();
+        // Zmiana lokalizacji
+        Configuration configuration = new Configuration();
+        configuration.setLocale(Locale.CHINA);
 
 
 
     }
 
-    private void stopRecording(){
-        mediaRecorder.release();
-        mediaRecorder.stop();
-        mediaRecorder = null;
+    @OnItemLongClick(R.id.button2)
+    public boolean onLongClick(View v){
+        Toast.makeText(this, "Długie kliknięcie", Toast.LENGTH_SHORT).show();
+        return true;
     }
 
 
-    private void playRecord(){
-        mediaPlayer = new MediaPlayer();
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        gestureDetector.onTouchEvent(event);
+        return true;
+    }
 
-        try {
-            mediaPlayer.setDataSource(ourAudio.getAbsolutePath());
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public boolean onDown(MotionEvent e) {
+        Log.e("GestureDetector", "OnDown " + e.toString());
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent e) {
+        Log.e("GestureDetector", "OnShowPress " + e.toString());
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent e) {
+        Log.e("GestureDetector", "OnSingleTapUp " + e.toString());
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        Log.e("GestureDetector", "OnScroll");
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent e) {
+        Log.e("GestureDetector", "OnLongPress " + e.toString());
 
     }
 
-    private void stopPlaying(){
-        mediaPlayer.release();
-        mediaPlayer.stop();
-        mediaPlayer = null;
+    @Override
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        Log.e("GestureDetector", "OnFling");
+        return false;
     }
 
 
